@@ -3,17 +3,9 @@
 (local state
   (setmetatable {} {:__index #{}}))
 
-(local log (require :conjure.log))
-
-(fn print-with-log [...]
-  (log.append (icollect [_ s (ipairs [...])]
-                (.. "; (out) " s)))
-  (print ...))
-
 (fn make-env [context]
   (doto (collect [k v (pairs _G)] k v)
-    (tset :___context___ (. state context))
-    (tset :print print-with-log)))
+    (tset :___context___ (. state context))))
 
 (fn reset! [{: context : env}]
   (set env.___replLocals___.*1 (. state context :*1))
@@ -53,7 +45,9 @@
   (eval-str "(+ 4 5)")
   (eval-str "*1")
   (eval-str "(os.date)")
-  (eval-str "(fn foo [x] x) foo-bar")
-  (eval-str "(+ 4 5"))
+  (eval-str "(fn foo [x] x) foo-bar"))
+
+(comment
+  (vim.print :hello!))
 
 {: eval-str}
