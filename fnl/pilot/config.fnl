@@ -1,16 +1,20 @@
 (local t (require :pilot.table))
 
 (local defaults
-  {:fennel "fennel"})
+  {:client "pilot.client.fennel"
+   :fennel "fennel"})
 
-(local !state (t.with-defaults {} defaults))
+(fn with-defaults [opts]
+  (vim.tbl_extend :keep opts defaults))
 
-(fn reset! [opts]
-  (t.reset! !state opts))
+(local !state (with-defaults {}))
 
 (fn inspect []
   (collect [k _ (pairs defaults)]
     k (. !state k)))
+
+(fn reset! [opts]
+  (t.reset! !state (with-defaults opts)))
 
 {: inspect
  : reset!

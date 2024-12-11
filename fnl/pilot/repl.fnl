@@ -3,9 +3,17 @@
 (local state
   (setmetatable {} {:__index #{}}))
 
+(local log (require :conjure.log))
+
+(fn print-with-log [...]
+  (log.append (icollect [_ s (ipairs [...])]
+                (.. "; (out) " s)))
+  (print ...))
+
 (fn make-env [context]
   (doto (collect [k v (pairs _G)] k v)
-    (tset :___context___ (. state context))))
+    (tset :___context___ (. state context))
+    (tset :print print-with-log)))
 
 (fn reset! [{: context : env}]
   (set env.___replLocals___.*1 (. state context :*1))
@@ -32,10 +40,10 @@
   (let [context (or (?. opts :context) :pilot.user)
         env (make-env context)
         result {}]
-    (fennel.repl {:readChunk (read-str {: context : env} s)
+    (fennel.repl {: env
+                  :readChunk (read-str {: context : env} s)
                   :onValues #(set result.values $)
-                  :onError #(set result.error [$...])
-                  : env})
+                  :onError #(set result.error [$...])})
     (if (not result.error)
       (values true result.values {: context
                                   :locals (save-context! {: context : env})})
