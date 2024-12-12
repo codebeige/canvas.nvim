@@ -1,4 +1,4 @@
 (fn setup [_]
-  (set vim.g.conjure#filetype#fennel :pilot.client.api))
+  (set vim.g.conjure#filetype#fennel :pilot.client.repl))
 
 {: setup}
