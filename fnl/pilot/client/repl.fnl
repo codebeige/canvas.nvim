@@ -31,8 +31,8 @@
     (display-output vim.g.__pilot_nvim_out__)
     (if success? (unpack result) (error (. result 1)))))
 
-(fn eval-str [{: code : on-result}]
-  (case (with-display-out repl.eval-str code)
+(fn eval-str [{: code : file-path : on-result}]
+  (case (with-display-out repl.eval-str code {:context file-path})
     (true xs) (do
                 (on-result (table.concat xs "\n"))
                 (each [_ x (ipairs xs)] (display-result x)))
@@ -42,10 +42,6 @@
   (case (file.read file-path)
     (false ex) (display-error ex)
     (true code) (eval-str (doto opts (tset :code code)))))
-
-(comment
-  (vim.print "one\ntwo\nthree") ; FIXME: format print output
-  :foo)
 
 {: buf-suffix
  : comment-node?
