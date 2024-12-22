@@ -1,7 +1,7 @@
 (local log (require :conjure.log))
-(local repl (require :pilot.repl))
+(local repl (require :canvas.repl))
 (local tree-sitter (require :conjure.tree-sitter))
-(local file (require :pilot.file))
+(local file (require :canvas.file))
 
 (local buf-suffix ".fnl")
 (local comment-prefix "; ")
@@ -25,10 +25,10 @@
                   (when (< 1 i) (.. "; (out) " l))))))
 
 (fn with-display-out [f ...]
-  (vim.cmd.redir :=> :__pilot_nvim_out__)
+  (vim.cmd.redir :=> :__canvas_nvim_out__)
   (let [[success? & result] [(pcall f ...)]]
     (vim.cmd.redir :END)
-    (display-output vim.g.__pilot_nvim_out__)
+    (display-output vim.g.__canvas_nvim_out__)
     (if success? (unpack result) (error (. result 1)))))
 
 (fn eval-str [{: code : file-path : on-result}]

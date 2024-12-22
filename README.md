@@ -1,4 +1,4 @@
-# 🪢 pilot.nvim
+# ⛵️ canvas.nvim
 
 Bring your own [fennel][1] to [conjure][2].
 
@@ -11,10 +11,10 @@ the top level "fennel" module (i.e., `(require :fennel)`).
 With `lazy.nvim` just add the plugin to your configuration:
 
 ```lua
--- $XDG_CONFIG_HOME/nvim/lua/plugins/pilot.nvim.lua
+-- $XDG_CONFIG_HOME/nvim/lua/plugins/canvas.nvim.lua
 
 return {
-  "codebeige/pilot.nvim",
+  "codebeige/canvas.nvim",
 
   -- the following entries are only required when deviating from the defaults:
   dependencies = { "codebeige/rig.nvim" },

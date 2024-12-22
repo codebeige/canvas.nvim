@@ -29,7 +29,7 @@
     locals))
 
 (fn eval-str [s opts]
-  (let [context (or (?. opts :context) :pilot.user)
+  (let [context (or (?. opts :context) :canvas.user)
         env (make-env context)
         result {}]
     (fennel.repl {: env
