@@ -11,8 +11,4 @@
          (values success? result))
     (nil ex) (values false ex)))
 
-(comment
-  (let [{: path} (require :fennel)]
-    [(vim.split path ";") (vim.fn.expand :%:.)]))
-
 {: read}

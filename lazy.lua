@@ -5,4 +5,8 @@ return {
   ft = "fennel",
   lazy = true,
   main = "canvas",
+  opts = {
+    enable = true,
+    fennel = "fennel",
+  },
 }

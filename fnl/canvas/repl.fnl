@@ -1,4 +1,4 @@
-(local fennel (require :fennel))
+(local config (require :canvas.config))
 
 (local state
   (setmetatable {} {:__index #{}}))
@@ -29,7 +29,8 @@
     locals))
 
 (fn eval-str [s opts]
-  (let [context (or (?. opts :context) :canvas.user)
+  (let [fennel (config.require-fennel)
+        context (or (?. opts :context) :canvas.user)
         env (make-env context)
         result {}]
     (fennel.repl {: env
