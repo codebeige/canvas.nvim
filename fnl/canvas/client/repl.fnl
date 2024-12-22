@@ -34,10 +34,10 @@
     (display-output vim.g.__canvas_nvim_out__)
     (if success? (unpack result) (error (. result 1)))))
 
-(fn eval-str [{: code : file-path : on-result}]
-  (case (with-display-out repl.eval-str code {:context file-path})
+(fn eval-str [{: code : context : on-result}]
+  (case (with-display-out repl.eval-str code {: context})
     (true xs) (do
-                (on-result (table.concat xs "\n"))
+                (when on-result (on-result (table.concat xs "\n")))
                 (each [_ x (ipairs xs)] (display-result x)))
     (false _ ex) (display-error ex)))
 
@@ -46,10 +46,16 @@
     (false ex) (display-error ex)
     (true code) (eval-str (doto opts (tset :code code)))))
 
+(fn doc-str [opts]
+  (let [opts* (collect [k v (pairs opts)] k v)]
+    (set opts*.code (.. ",doc " opts.code))
+    (eval-str opts*)))
+
 {: buf-suffix
  : comment-node?
  : comment-prefix
  : context
+ : doc-str
  : eval-file
  : eval-str
  : form-node?}
