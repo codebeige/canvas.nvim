@@ -8,6 +8,8 @@ the top level "fennel" module (i.e., `(require :fennel)`).
 
 # Usage
 
+## Installation
+
 With `lazy.nvim` just add the plugin to your configuration:
 
 ```lua
@@ -20,6 +22,16 @@ return {
   dependencies = { "codebeige/rig.nvim" },
   opts = { fennel = "fennel" },
 }
+```
+
+## Commands
+
+The `Fnl` command evaluates the a string of fennel code as a chunk and prints
+the result:
+
+```vim
+:Fnl (+ 3 4 5)
+" -> 12
 ```
 
 ---
