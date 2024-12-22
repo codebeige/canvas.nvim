@@ -3,6 +3,12 @@
 (local state
   (setmetatable {} {:__index #{}}))
 
+(fn clear! [context]
+  (tset state context nil))
+
+(fn clear-all! []
+  (each [k (pairs state)] (clear! k)))
+
 (fn make-env [context]
   (doto (collect [k v (pairs _G)] k v)
     (tset :___context___ (. state context))))
@@ -46,9 +52,12 @@
   (eval-str "(+ 4 5)")
   (eval-str "*1")
   (eval-str "(os.date)")
-  (eval-str "(fn foo [x] x) foo-bar"))
+  (eval-str "(fn foo [x] x) foo-bar")
+  (eval-str "(local baz 123) baz"))
 
 (comment
   (vim.print :hello!))
 
-{: eval-str}
+{: clear!
+ : clear-all!
+ : eval-str}

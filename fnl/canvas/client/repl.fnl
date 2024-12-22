@@ -1,7 +1,9 @@
+(local conjure (require :conjure.config))
+(local file (require :canvas.file))
 (local log (require :conjure.log))
+(local mapping (require :conjure.mapping))
 (local repl (require :canvas.repl))
 (local tree-sitter (require :conjure.tree-sitter))
-(local file (require :canvas.file))
 
 (local buf-suffix ".fnl")
 (local comment-prefix "; ")
@@ -14,6 +16,9 @@
 
 (fn context [...]
   (vim.fn.expand :%:p))
+
+(fn current-context []
+  (or vim.b.conjure#context (vim.fn.expand :%:p)))
 
 (fn display-result [s]
   (log.append (vim.split s "\n" {:plain true})))
@@ -51,6 +56,45 @@
     (set opts*.code (.. ",doc " opts.code))
     (eval-str opts*)))
 
+(fn reset []
+  (let [context (current-context)]
+    (repl.clear! context)
+    (log.append [(.. "; clear (current): " context)] {:break? true})))
+
+(fn reset-all []
+  (repl.clear-all!)
+  (log.append ["; clear (all)"] {:break? true}))
+
+(fn keymap [k]
+  (conjure.get-in [:canvas :client :repl :mapping k]))
+
+(fn on-filetype []
+  (mapping.buf
+        :FnlResetCurrentContext
+        (keymap :reset)
+        #(reset)
+        {:desc "Reset local state on current context."})
+  (mapping.buf
+        :FnlResetAllContexts
+        (keymap :reset_all)
+        #(reset-all)
+        {:desc "Reset local state on all contexts."}))
+
+(var setup? true)
+
+(fn setup []
+  (set setup? false)
+  (when (conjure.get-in [:mapping :enable_defaults])
+    (conjure.merge
+      {:canvas
+       {:client
+        {:repl
+         {:mapping
+          {:reset "rr"
+           :reset_all "ra"}}}}})))
+
+(when setup? (setup))
+
 {: buf-suffix
  : comment-node?
  : comment-prefix
@@ -58,4 +102,5 @@
  : doc-str
  : eval-file
  : eval-str
- : form-node?}
+ : form-node?
+ : on-filetype}
