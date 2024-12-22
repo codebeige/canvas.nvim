@@ -12,6 +12,9 @@
 (fn form-node? [...]
   (tree-sitter.node-surrounded-by-form-pair-chars? ...))
 
+(fn context [...]
+  (vim.fn.expand :%:p))
+
 (fn display-result [s]
   (log.append (vim.split s "\n" {:plain true})))
 
@@ -46,6 +49,7 @@
 {: buf-suffix
  : comment-node?
  : comment-prefix
+ : context
  : eval-file
  : eval-str
  : form-node?}
